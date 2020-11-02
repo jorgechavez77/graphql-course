@@ -84,6 +84,21 @@ const Mutation = {
 
     return post
   },
+  updatePost(parent, args, { db }, info) {
+    const { id, input } = args
+
+    const post = db.posts.find(post => post.id === id)
+
+    if (!post) {
+      throw new Error('Post not found')
+    }
+
+    post.title = input.title
+    post.body = input.body
+    post.published = input.published
+
+    return post
+  },
   deletePost(parent, args, { db }, info) {
     const { id: postId } = args
 
