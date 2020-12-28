@@ -93,9 +93,17 @@ const Mutation = {
       throw new Error('Post not found')
     }
 
-    post.title = input.title
-    post.body = input.body
-    post.published = input.published
+    if (typeof post.title === 'string') {
+      post.title = input.title
+    }
+    
+    if (typeof post.body === 'string') {
+      post.body = input.body
+    }
+
+    if (typeof post.published === 'boolean') {
+      post.published = input.published
+    }
 
     return post
   },
@@ -142,6 +150,21 @@ const Mutation = {
     const deletedComment = db.comments.splice(commentIndex, 1)
 
     return deletedComment.shift()
+  },
+  updateComment(parent, args, { db }, info) {
+    const { id, input } = args
+
+    const comment = db.comments.find(comment => comment.id === id)
+
+    if (!comment) {
+      throw new Error('Comment not found')
+    }
+
+    if (typeof input.text === 'string') {
+      comment.text = input.text
+    }
+
+    return comment
   },
 }
 
