@@ -96,7 +96,7 @@ const Mutation = {
     if (typeof post.title === 'string') {
       post.title = input.title
     }
-    
+
     if (typeof post.body === 'string') {
       post.body = input.body
     }

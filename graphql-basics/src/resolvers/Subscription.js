@@ -7,13 +7,13 @@ const Subscription = {
         count++
 
         pubsub.publish('count', {
-          count
+          count,
         })
       }, 1000)
 
       return pubsub.asyncIterator('count')
-    }
-  }
+    },
+  },
 }
 
 export { Subscription as default }
