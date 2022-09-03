@@ -67,7 +67,7 @@ const Mutation = {
 
     return deletedUser.shift()
   },
-  createPost(parent, args, { db }, info) {
+  createPost(parent, args, { db, pubsub }, info) {
     const { author } = args.input
     const userExists = db.users.some(user => user.id === author)
 
@@ -81,6 +81,10 @@ const Mutation = {
     }
 
     db.posts.push(post)
+
+    if (post.published) {
+      pubsub.publish('post', { post })
+    }
 
     return post
   },
@@ -120,7 +124,7 @@ const Mutation = {
 
     return deletedPost.shift()
   },
-  createComment(parent, args, { db }, info) {
+  createComment(parent, args, { db, pubsub }, info) {
     const { author, post } = args.input
 
     const userExists = db.users.some(user => user.id === author)
@@ -134,6 +138,7 @@ const Mutation = {
       ...args.input,
     }
     db.comments.push(comment)
+    pubsub.publish(`comment ${post}`, { comment })
 
     return comment
   },
